@@ -160,7 +160,7 @@ Iwyg
     </certificate>
     <ssl-decrypt>
       <forward-trust-certificate>
-        <rsa>aws-jam-pan</rsa>
+        <rsa>aws-pan</rsa>
       </forward-trust-certificate>
       <forward-untrust-certificate>
         <rsa>UNTRUST</rsa>
