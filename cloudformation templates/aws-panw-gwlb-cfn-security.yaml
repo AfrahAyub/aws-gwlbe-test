@@ -96,7 +96,7 @@ Parameters:
     Type: String
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$|^$
     ConstraintDescription: Must be a valid S3 Bucket name or left blank for no Bootstrap.
-    Default: aws-jam-challenge-resources
+    Default: aws-challenge-resources
 
   SourceS3BucketPath:
     Type: String
