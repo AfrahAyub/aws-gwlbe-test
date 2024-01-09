@@ -97,7 +97,7 @@
         <subject-hash>c0542737</subject-hash>
         <issuer-hash>c0542737</issuer-hash>
         <not-valid-before>Sep 19 22:02:47 2022 GMT</not-valid-before>
-        <issuer>aws-jam-pan</issuer>
+        <issuer>aws-pan</issuer>
         <not-valid-after>Sep 19 22:02:47 2023 GMT</not-valid-after>
         <common-name>aws-pan</common-name>
         <expiry-epoch>1695160967</expiry-epoch>
