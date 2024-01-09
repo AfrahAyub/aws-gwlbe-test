@@ -245,7 +245,7 @@ Resources:
   AWSLambdaFunction:
     Type: 'AWS::Lambda::Function'
     Properties:
-      Description: Create VM-Series bootstrap bucket from Jam source
+      Description: Create VM-Series bootstrap bucket 
       FunctionName: !Sub '${AWS::Region}-lambda'
       Handler: index.handler
       Role: !GetAtt 
