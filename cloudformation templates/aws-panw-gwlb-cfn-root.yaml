@@ -321,7 +321,7 @@ Resources:
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
     Properties:
-      TemplateURL: !Sub 'https://${SourceS3BucketName}-${AWS::Region}.s3.amazonaws.com/${SourceS3BucketPath}/${SecurityCftTemplateName}'
+      TemplateURL: !Sub 'https://${SourceS3BucketName}.${AWS::Region}.s3.amazonaws.com/${SourceS3BucketPath}/${SecurityCftTemplateName}'
       Parameters:
         KeyName: !Ref KeyName
         RemoteManagementCIDR: !Ref RemoteManagementCIDR
