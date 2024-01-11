@@ -342,7 +342,7 @@ Resources:
          - SecurityStack
          - CombinedStack
     Properties:
-      TemplateURL: !Sub 'https://${SourceS3BucketName}-${AWS::Region}.s3.amazonaws.com/${SourceS3BucketPath}/${VmSeriesCftTemplateName}'
+      TemplateURL: !Sub 'https://${SourceS3BucketName}.s3.${AWS::Region}.amazonaws.com/${SourceS3BucketPath}/${VmSeriesCftTemplateName}'
       Parameters:
         KeyName: !Ref KeyName
         RemoteManagementCIDR: !Ref RemoteManagementCIDR
@@ -357,7 +357,7 @@ Resources:
     DependsOn:
          - SecurityStack
     Properties:
-      TemplateURL: !Sub 'https://${SourceS3BucketName}-${AWS::Region}.s3.amazonaws.com/${SourceS3BucketPath}/${FrontendCftTemplateName}'
+      TemplateURL: !Sub 'https://${SourceS3BucketName}.s3.${AWS::Region}.amazonaws.com/${SourceS3BucketPath}/${FrontendCftTemplateName}'
       Parameters:
         KeyName: !Ref KeyName
         RemoteManagementCIDR: !Ref RemoteManagementCIDR
