@@ -37,7 +37,7 @@ Parameters:
 
 
 
-
+Resources:
   ManagementVpc:
     Type: AWS::EC2::VPC
     Properties:
