@@ -180,14 +180,6 @@ Parameters:
 
 
 
-Outputs:
-  AppbEC2InstancePublicIP:
-    Value: !GetAtt AppbEC2Instance.PublicIp
-    Description: Public IP address of AppbEC2Instance
-
-  GWLBServiceId:
-    Description: GWLB Service ID for use for additional GWLB Endpoints
-    Value: !GetAtt GWLBESerivceName.Data
 
  
 
