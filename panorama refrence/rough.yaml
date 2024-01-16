@@ -8,6 +8,7 @@ Parameters:
     Type: 'AWS::EC2::KeyPair::KeyName'
     Description: Name of the KeyPair used for EC2 instances
     ConstraintDescription: 'Must be the name of an existing EC2 KeyPair.'
+    Default: lab-key-pair
   
   LatestAmiId:
     Type : 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
@@ -24,18 +25,6 @@ Parameters:
 ###  PanoramaInstanceType:
 ###    Type : 'AWS::SSM::Parameter::Value<AWS::EC2::Instance::Id>'
 ###    Default: "m5.2xlarge"
-
-
-
-  EC2KeyPair:
-    Description: >-
-      AWS EC2 Instance Key Pair for authentication to the VM-Series Firewalls.
-    Type: AWS::EC2::KeyPair::KeyName
-    AllowedPattern: .+
-    ConstraintDescription: Must set an EC2 Key Pair for VM-Series
-    Default: lab-key-pair
-
-
 
 Resources:
   ManagementVpc:
