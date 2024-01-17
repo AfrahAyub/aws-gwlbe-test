@@ -32,7 +32,7 @@ Parameters:
     Type: String
     Description: Prefix to be used for naming / tagging resources
     ConstraintDescription: 'String for naming.'
-    Default: Sneaky Suds
+    Default: Attack VPC
 
 # Amazon Linux AMI for simulated workload EC2
   LatestAmiId :
