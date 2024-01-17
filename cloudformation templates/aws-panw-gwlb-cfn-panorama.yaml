@@ -1,1 +1,174 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: >-
+  Security VPC Deployment: VM-Series Deployment with AWS Gateway Load Balancer (GWLB)
+
+Parameters:
+  KeyName:
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Description: Name of the KeyPair used for EC2 instances
+    ConstraintDescription: 'Must be the name of an existing EC2 KeyPair.'
+    Default: lab-key-pair
+  
+  LatestAmiId:
+    Type : 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+### parameters for gateway loadbalancer
+  FirewallId:
+    Type: String
+    Description: ID of the firewall instance
+    Default: 'ami-09dd60214faaafc71'
+### parameters for panorama
+###  PanoramaAmi: 
+###    Type : 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+###    Default: "ami-05e891ec5e4cbd76f"
+###  PanoramaInstanceType:
+###    Type : 'AWS::SSM::Parameter::Value<AWS::EC2::Instance::Id>'
+###    Default: "m5.2xlarge"
+
+Resources:
+  ManagementVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.2.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: ManagementVPC
+
+  ManagementSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ManagementVpc
+      CidrBlock: 10.2.0.0/24
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: ManagementSubnet
+
+
+### panorama
+
+  PrivateNetworkInterface:
+    Type: "AWS::EC2::NetworkInterface"
+    Properties:
+      SubnetId: !Ref ManagementSubnet
+      SecurityGroupIds: 
+        - !Ref ManagementEC2SecurityGroup
+
+  PanoramaInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-05e891ec5e4cbd76f"
+      InstanceType: "m5.2xlarge"
+      NetworkInterfaces: 
+        - NetworkInterfaceId: !Ref PrivateNetworkInterface
+          DeviceIndex: 0
+
+  ElasticIp:
+    Type: "AWS::EC2::EIP"
+
+  ElasticIpAssociation:
+    Type: "AWS::EC2::EIPAssociation"
+    Properties:
+      AllocationId: !GetAtt ElasticIp.AllocationId
+      NetworkInterfaceId: !Ref PrivateNetworkInterface
+
+
+
+
+
+### VPC Resources for Management VPC
+  
+  ManagementVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.3.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: ManagementVPC
+
+  ManagementSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ManagementVPC
+      CidrBlock: 10.3.0.0/24
+      AvailabilityZone: !Select [0, !GetAZs 'us-east-1']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: ManagementSubnet
+
+  ManagementInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: mgmt-vpc-igw
+
+  ManagementVPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref ManagementVPC
+      InternetGatewayId: !Ref ManagementInternetGateway
+
+  ManagementRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref ManagementVPC
+      Tags:
+        - Key: Name
+          Value: mgmt-vpc-rt
+
+  ManagementSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref ManagementSubnet
+      RouteTableId: !Ref ManagementRouteTable
+
+  ManagementInternetRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref ManagementRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref ManagementInternetGateway
+
+  ManagementEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for ManagementEC2Instance
+      VpcId: !Ref ManagementVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: mgmt-vpc-sg
+
+  ManagementEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId  # Enter the appropriate AMI ID
+      InstanceType: t2.micro  # Enter the desired instance type
+      KeyName: !Ref KeyName
+      NetworkInterfaces:
+        - PrivateIpAddress: 10.3.0.10  # Enter the desired private IP address
+          SubnetId: !Ref ManagementSubnet
+          DeviceIndex: 0
+          GroupSet:
+            - !Ref ManagementEC2SecurityGroup
+      Tags:
+        - Key: Name
+          Value: mgmt-svr
+
+
+
+
+ 
 
