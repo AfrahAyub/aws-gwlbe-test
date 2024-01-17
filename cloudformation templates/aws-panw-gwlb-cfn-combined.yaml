@@ -621,7 +621,7 @@ Resources:
       InstanceId: !Ref DataEC2Instance
       Tags:
         - Key: Name
-          Value: !Sub "${DataNamePrefix} Beer Store Data EIP"
+          Value: !Sub "${DataNamePrefix} Application VPC EIP"
 
   # DataNATGWAZ1:
   #   Type: AWS::EC2::NatGateway
@@ -1142,7 +1142,7 @@ Outputs:
       Name: "FrontendGwlbeAz1"
   
   FrontendEIP:
-    Description: EIP of the Beerstore
+    Description: EIP of the Application VPC
     Value: !GetAtt FrontendEC2EIP.PublicIp
     Export:
       Name: FrontendEIP
