@@ -20,13 +20,13 @@ Parameters:
     Type: String
     Description: Prefix to be used for naming / tagging resources
     ConstraintDescription: 'String for naming.'
-    Default: Beer Store Frontend
+    Default: Application VPC Frontend
 
   DataNamePrefix:
     Type: String
     Description: Prefix to be used for naming / tagging resources
     ConstraintDescription: 'String for naming.'
-    Default: Beer Store Data
+    Default: Application VPC 
 
   AttackerNamePrefix:
     Type: String
