@@ -15,7 +15,7 @@ Parameters:
     Default: "10.4.1.0/24"
   AvailabilityZone:
     Type: String
-    Default: "a"
+    Default: "us-east-1a"
   PanoramaName:
     Type: String
     Default: "panorama"
@@ -30,10 +30,10 @@ Parameters:
     Default: "ami-0a926ff0116b451c8"
   SshKeyName:
     Type: String
-    # Add any default value you may have for ssh-key-name in your Terraform variables
+    Default: "lab-key-pair"
   PrefixNameTag:
     Type: String
-    # Add any default value you may have for prefix-name-tag in your Terraform variables
+    Default: ""
 
 Resources:
   ManagementVpc:
@@ -91,6 +91,7 @@ Resources:
     Properties:
       GroupName: "panorama-sg"
       VpcId: !Ref ManagementVpc
+      GroupDescription: "Security group for Panorama"
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
           IpProtocol: tcp
@@ -113,11 +114,12 @@ Resources:
     Properties:
       SubnetId: !Ref Subnet
       PrivateIpAddress: !Ref PanoramaPrivateIP
-      SecurityGroups:
+      GroupSet:
         - !GetAtt SecurityGroup.GroupId
       Tags:
         - Key: Name
           Value: !Sub "${PrefixNameTag}${PanoramaName}-primary-interface"
+
 
   EC2Instance:
     Type: AWS::EC2::Instance
@@ -142,5 +144,5 @@ Resources:
       NetworkInterfaceId: !Ref NetworkInterface
 
 Outputs:
-  PANORAMA_IP_ADDRESS:
+  PanoramaIPAddress:
     Value: !GetAtt ElasticIp.PublicIp
