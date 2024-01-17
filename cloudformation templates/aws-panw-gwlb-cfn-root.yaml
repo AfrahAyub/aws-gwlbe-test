@@ -163,13 +163,13 @@ Parameters:
     Type: String
     Description: Prefix to be used for naming / tagging resources in Data VPC
     ConstraintDescription: 'String for naming.'
-    Default: Beer Store Data
+    Default: Application VPC
 
   FrontendNamePrefix:
     Type: String
     Description: Prefix to be used for naming / tagging resources in Frontend VPC
     ConstraintDescription: 'String for naming.'
-    Default: Beer Store Frontend
+    Default: Application VPC Frontend
 
 # Naming Prefix
   SecurityNamePrefix:
